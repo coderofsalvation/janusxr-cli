@@ -4,7 +4,7 @@ Swiss-army knife to automate janusXR / JML things on a server
 
 # Usage
 
-> check for broken links
+> scan a room URL for broken links in JML+HTML
 
 ```
 $ ./janusxr --health http://localhost:8790/models/m5gr26w0wqqs
