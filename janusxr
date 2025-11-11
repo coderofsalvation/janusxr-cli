@@ -58,5 +58,6 @@ function health( tmpfile, line, attr, check, u) {
         nlinks+=1
     }
     print "⚕️ health: "(( 100/nlinks )*nlinksok)"%"
+    if( nlinks != nlinksok ) exit(1)
 }
 

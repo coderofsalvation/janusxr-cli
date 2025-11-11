@@ -1,8 +1,10 @@
 # JanusXR cli
 
-Swiss-army knife to automate janusXR / JML things.
+Swiss-army knife to automate janusXR / JML things on a server
 
 # Usage
+
+> check for broken links
 
 ```
 $ ./janusxr --health http://localhost:8790/models/m5gr26w0wqqs
@@ -28,4 +30,5 @@ $ ./janusxr --health http://localhost:8790/models/m5gr26w0wqqs
 Why not some superfancy scripting for this task?
 
 * awk is great for all things text and templating usecases
-* lightweight
+* dependencyfree
+* lightweight to add to docker-image for automation
