@@ -1,6 +1,6 @@
 # JanusXR cli
 
-Swiss-army knife to automate janusXR / JML things on a server
+Portable swiss-army knife to automate janusXR / JML things on a server
 
 # Usage
 
