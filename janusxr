@@ -1,0 +1,62 @@
+#!/usr/bin/env -S awk -f
+
+function usage() {
+    print "Usage: ./janusxr --health <room_url> \n"
+    exit 1
+}
+
+# ------------------------------
+# Core dispatcher
+# ------------------------------
+BEGIN {
+    if (ARGC < 2) usage()
+    command = ARGV[1]
+    if (command == "--health") {
+        health()
+    } else {
+        printf("Unknown command: %s\n", command)
+        usage()
+    }
+}
+
+function health( tmpfile, line, attr, check, u) {
+    url = ARGV[2]
+    if (url == "") {
+        print "❌ Missing URL argument."
+        usage()
+    }
+    rooturl = url
+    sub(/\/[^\/]+$/, "", rooturl)
+    tmpfile = "/tmp/out.html"
+
+    # Fetch HTML page using curl
+    cmd = "curl -s \"" url "\" -o " tmpfile
+    if (system(cmd) != 0) { print "❌ Failed to fetch " url; exit 1; }
+
+    # Parse attributes from src= or url=
+    while ((getline line < tmpfile) > 0) {
+        while (match(line, /(src|url)="[^"]+"/)) {
+            attr = substr(line, RSTART, RLENGTH)
+            sub(/^[^=]+="/, "", attr)
+            sub(/"$/, "", attr)
+            links[attr] = 1
+            line = substr(line, RSTART + RLENGTH)
+        }
+    }
+    close(tmpfile)
+
+    # Check each extracted links
+    nlinks = 0
+    nlinksok = 0
+    for (u in links) {
+        if( substr(u,1,1) == "/" ) u = rooturl""u
+        check = "curl -I -s \"" u "\" > /dev/null"
+        if (system(check) == 0){
+            nlinksok++
+            printf("✅ %s\n", u)
+        }else printf("❌ %s\n", u)
+        nlinks+=1
+    }
+    print "⚕️ health: "(( 100/nlinks )*nlinksok)"%"
+}
+
