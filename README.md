@@ -33,7 +33,7 @@ $ ./janusxr --health http://localhost:8790/models/m5gr26w0wqqs
 
 ```
 
-> scrape a room URL and rewrite JML to serve local assets
+> scrape a room URL and rewrite JML to serve local assets (usecase: preservation/local-first/prototyping)
 
 ```bash
 $ ./janusxr --scrape https://www.janusxr.org/newlobby/index.html mydir
