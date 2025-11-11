@@ -1,6 +1,9 @@
 # JanusXR cli
 
-Portable swiss-army knife to automate janusXR / JML things on a server
+Portable swiss-army knife to automate [janusXR](https://janusxr.org) / JML things on a server
+
+> *What is [janusXR](https://janusxr.org)?* JanusXR is an open, user-operated immersive web layer, open-sourced by the JanusVR company, that seamlessly lives within websites, even 12 years later. It provides a highly viable and easy-to-adopt ecosystem of portals, enabling immersive experiences that challenge the traditional app store paradigm.
+
 
 # Usage
 
