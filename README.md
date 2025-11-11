@@ -2,7 +2,7 @@
 
 Portable swiss-army knife to automate [janusXR](https://janusxr.org) / JML things on a server
 
-> *What is [janusXR](https://janusxr.org)?* It's an open, user-operated immersive web layer, open-sourced by the JanusVR company, that seamlessly lives within websites, even 12 years later thanks to [janusweb](https://github.com/jbaicoianu/janusweb). It provides a highly viable and easy-to-adopt ecosystem of portals, enabling immersive experiences that challenge the traditional app store paradigm.
+> *What is [janusXR](https://janusxr.org)?* It's an open, user-operated immersive web layer, open-sourced by the JanusVR company, that seamlessly lives within websites, even 12 years later thanks to [janusweb](https://github.com/jbaicoianu/janusweb). It provides a highly viable and easy-to-adopt ecosystem of portals, enabling immersive experiences that challenge the traditional app store paradigm. Get started with [this guide](https://madjin.github.io/janus-guide/#/).
 
 
 # Usage
