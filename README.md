@@ -4,12 +4,17 @@ Portable swiss-army knife to automate [janusXR](https://janusxr.org) / JML thing
 
 > *What is [janusXR](https://janusxr.org)?* It's an open, user-operated immersive web layer, open-sourced by the JanusVR company, that seamlessly lives within websites, even 12 years later thanks to [janusweb](https://github.com/jbaicoianu/janusweb). It provides a highly viable and easy-to-adopt ecosystem of portals, enabling immersive experiences that challenge the traditional app store paradigm. Get started with [this guide](https://madjin.github.io/janus-guide/#/).
 
-
 # Usage
+
+```
+Usage: ./janusxr --health <room_url> [--max-time-per-asset 5] 
+       ./janusxr --scrape <room_url> <outdir>
+```
+## Examples
 
 > scan a room URL for broken links in JML+HTML
 
-```
+```bash
 $ ./janusxr --health http://localhost:8790/models/m5gr26w0wqqs
 
 ✅ http://localhost:8791/templates/xrfragment/%232/website.glb
@@ -28,7 +33,22 @@ $ ./janusxr --health http://localhost:8790/models/m5gr26w0wqqs
 
 ```
 
-# Awk?
+> scrape a room URL and rewrite JML to serve local assets
+
+```bash
+$ ./janusxr --scrape https://www.janusxr.org/newlobby/index.html mydir
+🔗 http://dizzket.com/archive/dotmatrix/
+🔗 https://vesta.janusvr.com/nazrin/minecraft-sandbox
+✅ http://www.janusvr.com/newlobby/scripts/home.txt
+...
+
+$ ls -la mydir
+index.html
+home.txt
+...
+```
+
+## Awk?
 
 Why not some superfancy scripting for this task?
 

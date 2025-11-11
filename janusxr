@@ -1,7 +1,8 @@
 #!/usr/bin/env -S awk -f
 
 function usage() {
-    print "Usage: ./janusxr --health <room_url> \n"
+    print "Usage: ./janusxr --health <room_url> [--max-time-per-asset 5] \n" \
+          "       ./janusxr --scrape <room_url> <outdir>\n"
     exit 1
 }
 
@@ -11,15 +12,15 @@ function usage() {
 BEGIN {
     if (ARGC < 2) usage()
     command = ARGV[1]
-    if (command == "--health") {
-        health()
+    if (command == "--health" || command == "--scrape") {
+        scrape(command)
     } else {
         printf("Unknown command: %s\n", command)
         usage()
     }
 }
 
-function health( tmpfile, line, attr, check, u) {
+function scrape( arg, tmpfile, line, attr, check, u) {
     url = ARGV[2]
     if (url == "") {
         print "❌ Missing URL argument."
@@ -46,18 +47,59 @@ function health( tmpfile, line, attr, check, u) {
     close(tmpfile)
 
     # Check each extracted links
-    nlinks = 0
-    nlinksok = 0
-    for (u in links) {
-        if( substr(u,1,1) == "/" ) u = rooturl""u
-        check = "curl -I -s \"" u "\" > /dev/null"
-        if (system(check) == 0){
-            nlinksok++
-            printf("✅ %s\n", u)
-        }else printf("❌ %s\n", u)
-        nlinks+=1
+    if( arg == "--health" ){
+      maxtime = ARGV[3]
+      if ( maxtime == "" ) maxtime = 5
+      nlinks = 0
+      nlinksok = 0
+      for (u in links) {
+          if( substr(u,1,1) == "/" ) u = rooturl""u
+          check = "curl -L --max-time "maxtime" -I -s \"" u "\" > /dev/null"
+          if (system(check) == 0){
+              nlinksok++
+              printf("✅ %s\n", u)
+          }else printf("❌ %s\n", u)
+          nlinks+=1
+      }
+      print "⚕️ health: "(( 100/nlinks )*nlinksok)"%"
+      if( nlinks != nlinksok ) exit(1)
     }
-    print "⚕️ health: "(( 100/nlinks )*nlinksok)"%"
-    if( nlinks != nlinksok ) exit(1)
+
+    if( arg == "--scrape" ) {
+      outdir = ARGV[3]
+      if ( outdir == "" ) outdir = "."
+      system("mkdir "outdir" || true ")
+      system("cp "tmpfile" "outdir"/index.html")
+
+      for (u in links) {
+          if( substr(u,1,1) == "/" ) u = rooturl""u
+          check = "curl -L --max-time 20 -I -s \"" u "\" > /dev/null"
+          if (system(check) == 0 && has_non_html_ext(u) ){
+              n = split(u, fileparts, "/")
+              filepart = fileparts[n]
+              outfile  = outdir"/"filepart
+              system("curl -L --max-time 20 -s \"" u "\" > "outfile)
+              system("sed -i 's|"u"|"filepart"|g' "outdir"/index.html")
+              nlinksok++
+              printf("✅ %s\n", u)
+          }else printf("🔗 %s\n", u)
+          nlinks+=1
+      }
+    }
 }
 
+# Function: has_non_html_ext
+# Returns 1 if the file has an extension after at least one slash and it is not "html"
+# Returns 0 otherwise
+function has_non_html_ext(file,   arr) {
+    # Check for at least one slash
+    if (file !~ /\//) return 0
+
+    # Match extension after last dot that is not a slash
+    if (match(file, /\.([^.\/]+)$/, arr)) {
+        ext = arr[1]
+        if (ext != "html") return 1
+    }
+
+    return 0
+}
