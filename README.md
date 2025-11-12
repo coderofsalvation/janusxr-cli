@@ -64,7 +64,7 @@ $ ./janusxr optimize https://janusvr.com/newlobby/index.html
 ```
 
 * `preconnect` speeds up loading remote resources (DNS lookup, TCP handshake, TLS negotiation)
-* `<a href=".."> allows archive.org to fully capture the room (resources)
+* &lt;a href=".."&gt; allows archive.org to fully capture the room (resources)
 
 ## Awk?
 
