@@ -57,8 +57,11 @@ $ ./janusxr optimize https://janusvr.com/newlobby/index.html
 <!-- copy/paste below into your HTML/JML-file -->
 
 <a href='http://www.janusvr.com/newlobby/scripts/home.txt'/>
-<link rel='preload' href='http://www.janusvr.com'/>
-<a href='http://www.janusvr.com/newlobby/images/skybox/dds/LobbyRadience.dds'/>
+<a href='http://timigi.com'/>
+<link rel='preconnect' href='http://timigi.com'/>
+<a href='http://janusvr.thevirtualarts.com/random1.php'/>
+<link rel='preconnect' href='http://janusvr.thevirtualarts.com'/>
+<a href='http://www.janusvr.com/newlobby/images/windmill1.png'/>
 ...
 
 ```

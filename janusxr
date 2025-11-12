@@ -101,7 +101,7 @@ function scrape( arg, tmpfile, line, attr, check, u) {
               split(u,urlpart,"/")
               domain=urlpart[1]"//"urlpart[3]
               if( !domains[domain] ){ 
-                printf("<link rel='preload' href='"domain"'/>\n")
+                printf("<link rel='preconnect' href='"domain"'/>\n")
                 domains[domain]=1
               }
           }
