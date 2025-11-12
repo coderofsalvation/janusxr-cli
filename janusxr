@@ -1,8 +1,9 @@
 #!/usr/bin/env -S awk -f
 
 function usage() {
-    print "Usage: ./janusxr --health <room_url> [--max-time-per-asset 5] \n" \
-          "       ./janusxr --scrape <room_url> <outdir>\n"
+    print "Usage: ./janusxr health <room_url> [--max-time-per-asset 5] \n" \
+          "       ./janusxr scrape <room_url> <outdir>\n" \
+          "       ./janusxr optimize <room_url>\n"
     exit 1
 }
 
@@ -12,9 +13,12 @@ function usage() {
 BEGIN {
     if (ARGC < 2) usage()
     command = ARGV[1]
-    if (command == "--health" || command == "--scrape") {
+    if (command == "health" || command == "scrape" || command == "optimize" ) {
         scrape(command)
     } else {
+    printf("1:"ARGV[0])
+    printf("1:"ARGV[1])
+    printf("2:"ARGV[2])
         printf("Unknown command: %s\n", command)
         usage()
     }
@@ -47,7 +51,7 @@ function scrape( arg, tmpfile, line, attr, check, u) {
     close(tmpfile)
 
     # Check each extracted links
-    if( arg == "--health" ){
+    if( arg == "health" ){
       maxtime = ARGV[3]
       if ( maxtime == "" ) maxtime = 5
       nlinks = 0
@@ -65,7 +69,7 @@ function scrape( arg, tmpfile, line, attr, check, u) {
       if( nlinks != nlinksok ) exit(1)
     }
 
-    if( arg == "--scrape" ) {
+    if( arg == "scrape" ) {
       outdir = ARGV[3]
       if ( outdir == "" ) outdir = "."
       system("mkdir "outdir" || true ")
@@ -84,6 +88,23 @@ function scrape( arg, tmpfile, line, attr, check, u) {
               printf("✅ %s\n", u)
           }else printf("🔗 %s\n", u)
           nlinks+=1
+      }
+    }
+
+    if( arg == "optimize" ) {
+      printf("<!-- copy/paste below into your HTML/JML-file -->\n")
+      for (u in links) {
+          if( substr(u,1,1) == "/" ) u = rooturl""u
+          check = "curl -L --max-time 20 -I -s \"" u "\" > /dev/null"
+          if (system(check) == 0 && has_non_html_ext(u) ){
+              printf("<a href='"u"'/>\n")
+              split(u,urlpart,"/")
+              domain=urlpart[1]"//"urlpart[3]
+              if( !domains[domain] ){ 
+                printf("<link rel='preload' href='"domain"'/>\n")
+                domains[domain]=1
+              }
+          }
       }
     }
 }

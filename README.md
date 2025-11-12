@@ -7,15 +7,16 @@ Portable swiss-army knife to automate [janusXR](https://janusxr.org) / JML thing
 # Usage
 
 ```
-Usage: ./janusxr --health <room_url> [--max-time-per-asset 5] 
-       ./janusxr --scrape <room_url> <outdir>
+Usage: ./janusxr health <room_url> [--max-time-per-asset 5] 
+       ./janusxr scrape <room_url> <outdir>
+       ./janusxr optimize <room_url> 
 ```
 ## Examples
 
 > scan a room URL for broken links in JML+HTML
 
 ```bash
-$ ./janusxr --health http://localhost:8790/models/m5gr26w0wqqs
+$ ./janusxr health http://localhost:8790/models/m5gr26w0wqqs
 
 ✅ http://localhost:8791/templates/xrfragment/%232/website.glb
 ✅ http://localhost:8790/models/assets/offscreen_renderer-186b8c52.js
@@ -36,7 +37,7 @@ $ ./janusxr --health http://localhost:8790/models/m5gr26w0wqqs
 > scrape a room URL and rewrite JML to serve local assets (usecase: preservation/local-first/prototyping)
 
 ```bash
-$ ./janusxr --scrape https://www.janusxr.org/newlobby/index.html mydir
+$ ./janusxr scrape https://www.janusxr.org/newlobby/index.html mydir
 🔗 http://dizzket.com/archive/dotmatrix/
 🔗 https://vesta.janusvr.com/nazrin/minecraft-sandbox
 ✅ http://www.janusvr.com/newlobby/scripts/home.txt
@@ -47,6 +48,23 @@ index.html
 home.txt
 ...
 ```
+
+> optimize a room by adding tags to your JML
+
+```bash
+$ ./janusxr optimize https://janusvr.com/newlobby/index.html
+
+<!-- copy/paste below into your HTML/JML-file -->
+
+<a href='http://www.janusvr.com/newlobby/scripts/home.txt'/>
+<link rel='preload' href='http://www.janusvr.com'/>
+<a href='http://www.janusvr.com/newlobby/images/skybox/dds/LobbyRadience.dds'/>
+...
+
+```
+
+* `preconnect` speeds up loading remote resources (DNS lookup, TCP handshake, TLS negotiation)
+* `<a href=".."> allows archive.org to fully capture the room (resources)
 
 ## Awk?
 
